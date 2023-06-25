@@ -6,6 +6,7 @@ const authschema= mongoose.Schema({
         type: String,
         required:[true,"Please Add your name"],
             },
+            
     email:{
         type:String,
         required:[true,"Please add your email ID"],

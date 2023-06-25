@@ -12,6 +12,9 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 
 
+app.use("/",(req, res)=>{
+  res.status(200).json({message:"Why I'm not getting it?"})
+});
 app.use("/api/data",require("./routes/users.route"));
 app.use("/api/auth",require("./routes/authroutes"));
 app.use(errorhandler);
