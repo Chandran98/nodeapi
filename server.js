@@ -12,7 +12,7 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 
 
-app.use("/api/message",(req, res)=>{
+app.use("/api",(req, res)=>{
   res.status(200).json({message:"Why I'm not getting it?"})
 });
 
