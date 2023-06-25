@@ -19,6 +19,9 @@ app.use(express.json());
 app.use("/api/aws",(req, res)=>{
   res.status(200).json({message:"Busted"})
 });
+app.use("/api/wide",(req, res)=>{
+  res.status(200).json({message:"Busted not alone!"})
+});
 app.use("/api/data",require("./routes/users.route"));
 app.use("/api/auth",require("./routes/authroutes"));
 app.use(errorhandler);
