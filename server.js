@@ -17,7 +17,7 @@ app.use("/api/message",(req, res)=>{
 });
 
 app.use("/api/aws",(req, res)=>{
-  res.status(200).json({message:"Online red"})
+  res.status(200).json({message:"Busted"})
 });
 app.use("/api/data",require("./routes/users.route"));
 app.use("/api/auth",require("./routes/authroutes"));
