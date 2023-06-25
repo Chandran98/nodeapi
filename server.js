@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 app.use("/api",(req, res)=>{
-  res.status(200).json({message:"Why I'm not getting it?"})
+  res.status(200).json({message:"Why I'm  getting it?"})
 });
 
 app.use("/api/aws",(req, res)=>{
