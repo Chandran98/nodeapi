@@ -16,14 +16,17 @@ app.use(express.json());
 //   res.status(200).json({message:"Why I'm  getting it?"})
 // });
 
+
+app.use("/api/users",require("./routes/usersroute"));
+
 app.use("/api/aws",(req, res)=>{
   res.status(200).json({message:"Busted"})
 });
 app.use("/api/wide",(req, res)=>{
   res.status(200).json({message:"Busted not alone!"})
 });
-app.use("/api/data",require("./routes/users.route"));
 app.use("/api/auth",require("./routes/authroutes"));
+app.use("/api/products",require("./routes/productroutes"))
 app.use(errorhandler);
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
