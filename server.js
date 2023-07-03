@@ -1,4 +1,6 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+
 const cors = require("cors");
 const errorhandler = require("./middlewares/error");
 const connectDb = require("./config/db.config");
@@ -13,8 +15,10 @@ connectDb();
 const app = express();
 
 const port = process.env.PORT || 4000;
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.use(express.json());
+// app.use(express.json());
 app.use(cors());
 
 const connection = new Connection(clusterApiUrl("devnet"));
