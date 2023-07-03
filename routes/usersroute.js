@@ -9,7 +9,7 @@ const {
 const { validateToken } = require("../middlewares/tokenvalidation");
 
 const router = express.Router();
-// router.use(validateToken);  
+router.use(validateToken);
 router.route("/").get(getuserdata).post(createuser);
 
 router
