@@ -71,7 +71,7 @@ const signInRequest = asyncHandler(async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN,
-    { expiresIn: "60m" }
+    { expiresIn: "1d" }
   );
   res.status(200).json({
     status: "success",

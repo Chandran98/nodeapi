@@ -1,10 +1,11 @@
 const asyncHanlder = require("express-async-handler");
-const userModel = require("../models/user.model");
+const userModel = require("../models/authModels");
+const { validateMongoDbId } = require("../helpers/validateId");
 
 const getuserdata = asyncHanlder(async (req, res) => {
-  const user = await userModel.find({ user_id: req.user.id });
+  // const user = await userModel.find({ user_id: req.user.id });
 
-  // const user = await userModel.find({});
+  const user = await userModel.find(req.query);
   res.status(200).json(user);
 });
 
@@ -24,16 +25,20 @@ const createuser = asyncHanlder(async (req, res) => {
   res.status(200).json(user);
 });
 const getuserById = asyncHanlder(async (req, res) => {
+  console.log(req.params.id);
   const user = await userModel.findById(req.params.id);
-  if (!user) {
+  console.log(user.id);
+  if (!user || user === null || user === undefined) {
+    // res.status(404).json({ message: "Not found", details: user });
     res.status(404);
     throw new Error("Not found ");
   }
-  if (user.user_id.toString() !== req.user.id) {
+  if (user.user_id !== req.user.id) {
     res.status(403);
     throw new Error("Not valid");
   }
-  res.status(200).json({ message: "get by id", details: user });
+
+  res.status(200).json({ message: "success", details: user });
 });
 
 const updateuserById = asyncHanlder(async (req, res) => {
@@ -42,7 +47,7 @@ const updateuserById = asyncHanlder(async (req, res) => {
     res.status(404);
     throw new Error("Not found ");
   }
-  if (user.user_id.toString() !== req.user.id) {
+  if (user.user_id !== req.user.id) {
     res.status(403);
     throw new Error("Not valid");
   }
@@ -60,12 +65,63 @@ const deleteuserById = asyncHanlder(async (req, res) => {
     res.status(404);
     throw new Error("Not found ");
   }
-  if (user.user_id.toString() !== req.user.id) {
+  if (user.user_id !== req.user.id) {
     res.status(403);
     throw new Error("Not valid");
   }
   await userModel.deleteOne({ _id: req.params.id });
   res.status(200).json({ message: "delete by id" });
+});
+
+const blockUser = asyncHanlder(async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  const user = await userModel.findById(id);
+  console.log(user);
+
+  // if (!user) {
+  //   res.status(404);
+  //   throw new Error("Not found ");
+  // }
+  validateMongoDbId(id);
+
+  // if (user.user_id !== req.user.id) {
+  //   res.status(403);
+  //   throw new Error("Not valid");
+  // }
+
+  const bUser = await userModel.findByIdAndUpdate(
+    id,
+    { isBlocked: true },
+    { new: true }
+  );
+  res
+    .status(200)
+    .json({ status: "success", message: `${bUser.name} is blocked` });
+});
+
+const unBlockUser = asyncHanlder(async (req, res) => {
+  const id = req.params.id;
+  const user = await userModel.findById(id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("Not found ");
+  }
+
+  if (user.user_id !== req.user.id) {
+    res.status(403);
+    throw new Error("Not valid");
+  }
+
+  const unBUser = await userModel.findByIdAndUpdate(
+    id,
+    { $set: { isBlocked: false } },
+    { new: true }
+  );
+  res
+    .status(200)
+    .json({ status: "success", message: `${unBUser.name} .is Un-blocked` });
 });
 
 module.exports = {
@@ -74,4 +130,6 @@ module.exports = {
   deleteuserById,
   updateuserById,
   getuserById,
+  unBlockUser,
+  blockUser,
 };

@@ -10,6 +10,7 @@ const { Connection, clusterApiUrl } = require("@solana/web3.js");
 
 const crypto = require("./helpers/crypto");
 const { route } = require("./routes/usersroute");
+const morgan = require("morgan");
 
 connectDb();
 const app = express();
@@ -17,6 +18,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(morgan("dev"));
 
 // app.use(express.json());
 app.use(cors());
@@ -48,7 +50,7 @@ app.use("/api/aws", (req, res) => {
   res.status(200).json({ message: "Busted" });
 });
 
-app.use("/api", require("./routes/authroutes"));
+app.use("/api/auth", require("./routes/authroutes"));
 app.use("/api/products", require("./routes/productroutes"));
 app.use("/api/crypto", require("./routes/cryptorouters"));
 

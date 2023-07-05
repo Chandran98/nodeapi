@@ -5,6 +5,8 @@ const {
   deleteuserById,
   updateuserById,
   getuserById,
+  blockUser,
+  unBlockUser,
 } = require("../controllers/user.controller");
 const { validateToken } = require("../middlewares/tokenvalidation");
 
@@ -15,7 +17,9 @@ router.route("/").get(getuserdata).post(createuser);
 router
   .route("/:id")
   .get(getuserById)
-  .put(updateuserById)
+  .post(updateuserById)
   .delete(deleteuserById);
+router.route("/blockUser/:id").post(blockUser);
+router.route("/unBlockUser/:id").post(unBlockUser);
 
 module.exports = router;
