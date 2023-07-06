@@ -15,6 +15,7 @@
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "bigint-buffer": "^1.1.5",
+    "binance-api-node": "^0.12.6",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "cron": "^2.3.1",
@@ -28,6 +29,7 @@
     "mongoose": "^7.2.0",
     "mongoose-unique-validator": "^4.0.0",
     "morgan": "^1.10.0",
+    "node-binance-api": "^0.13.1",
     "nodemon": "^2.0.22"
   }
 }
