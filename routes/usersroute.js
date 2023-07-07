@@ -9,9 +9,11 @@ const {
   unBlockUser,
 } = require("../controllers/user.controller");
 const { validateToken } = require("../middlewares/tokenvalidation");
+const { mailController } = require("../helpers/mailer");
 
 const router = express.Router();
-router.use(validateToken);
+// router.use(validateToken);
+router.route("/sendemail").post(mailController);
 router.route("/").get(getuserdata).post(createuser);
 
 router
