@@ -16,6 +16,7 @@ connectDb();
 const app = express();
 
 const port = process.env.PORT || 4000;
+// app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
@@ -54,7 +55,12 @@ app.use("/api/auth", require("./routes/authroutes"));
 app.use("/api/products", require("./routes/productroutes"));
 app.use("/api/crypto", require("./routes/cryptorouters"));
 
+app.all("*", (req, res) => {
+  res.status(404);
+  throw new Error("Route Not Found");
+});
 app.use(errorhandler);
+
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
 });
