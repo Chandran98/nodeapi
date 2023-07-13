@@ -2,11 +2,11 @@ const asyncHandler = require("express-async-handler");
 const authSchema = require("../models/authModels");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const { ethers } = require("ethers");
 
 // Register handlers
 const signUpRequest = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email,phone, password } = req.body;
   console.log(req.body);
 
   if (!name || !email || !password) {
@@ -15,16 +15,29 @@ const signUpRequest = asyncHandler(async (req, res) => {
   }
 
   const userAvailable = await authSchema.findOne({ email });
+  console.log("dsd");
 
   if (userAvailable) {
     res.status(400);
     throw new Error("User already exists");
   }
+  console.log("ddsdssd");
   const hashedPassword = await bcrypt.hash(password, 10);
   console.log(hashedPassword);
+
+  const wallet = ethers.Wallet.createRandom();
+  const publicAddress = wallet.address;
+  const privateAddress = wallet.privateKey;
+
+console.log(`${publicAddress} ${privateAddress}`)
   const user = await authSchema.create({
     name,
     email,
+    wallet: {
+      publicAddress,
+      privateAddress,
+    },
+    phone,
     password: hashedPassword,
   });
 

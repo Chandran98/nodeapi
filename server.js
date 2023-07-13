@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const {ethers} = require("ethers");
 const cors = require("cors");
 const errorhandler = require("./middlewares/error");
 const connectDb = require("./config/db.config");
@@ -24,14 +24,15 @@ app.use(morgan("dev"));
 // app.use(express.json());
 app.use(cors());
 
+
 const connection = new Connection(clusterApiUrl("devnet"));
 const keypair = Keypair.generate();
 
 const publicKey = keypair.publicKey.toString();
 const privateKey = keypair.secretKey.toString();
 
-console.log(`Key's ${publicKey}`);
-console.log(`Key's ${privateKey}`);
+// console.log(`Key's ${publicKey}`);
+// console.log(`Key's ${privateKey}`);
 
 // const text_to_encrypt = "texta";
 // const result = crypto.aesEncrypt(text_to_encrypt);
