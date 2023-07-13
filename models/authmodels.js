@@ -11,8 +11,17 @@ const authSchema = mongoose.Schema(
       required: [true, "Please add an email"],
       unique: [true, "Please add a valid email"],
     },
+
+    wallet: [
+      {
+        publicAddress: { type: String },
+        privateAddress: { type: String },
+      },
+    ],
     phone: {
       type: String,
+      
+      required: [true, "Please add a phone"],
       default: "",
     },
     isBlocked: {

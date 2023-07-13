@@ -12,10 +12,10 @@ const router = express.Router();
 // router.post("/register", registerUser);
 // router.post("/login", loginUser);
 
-router.post("/signUp", signUpRequest);
-router.post("/signIn", signInRequest);
+router.route("/signUp").post(signUpRequest);
+router.route("/signIn").post(signInRequest);
 
-router.get("/current", validateToken, currentUser);
-// I made  a change 
+router.route("/current").get(validateToken, currentUser);
+// I made  a change
 // now made changes
 module.exports = router;
