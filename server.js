@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const {ethers} = require("ethers");
+const { ethers } = require("ethers");
 const cors = require("cors");
 const errorhandler = require("./middlewares/error");
 const connectDb = require("./config/db.config");
@@ -24,7 +24,6 @@ app.use(morgan("dev"));
 // app.use(express.json());
 app.use(cors());
 
-
 const connection = new Connection(clusterApiUrl("devnet"));
 const keypair = Keypair.generate();
 
@@ -41,10 +40,10 @@ const privateKey = keypair.secretKey.toString();
 // const decryptedText = crypto.aesDecrypt(result);
 // console.log("‘decrypted text", decryptedText);
 
-// const decryptedText2 = crypto._decrypt(
-//   "3futy7T/BurYP9HCczSWkbU0uEjDJ39VX9azB41K+HgsCuGHqr7/ZuYRhfe7/ho1"
-// );
-// console.log("‘decrypted text", decryptedText2);
+const decryptedText2 = crypto._decrypt(
+  "3futy7T/BurYP9HCczSWkbU0uEjDJ39VX9azB41K+HgsCuGHqr7/ZuYRhfe7/ho1"
+);
+console.log("‘decrypted text", decryptedText2);
 
 app.use("/api/users", require("./routes/usersroute"));
 

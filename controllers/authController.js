@@ -3,6 +3,7 @@ const authSchema = require("../models/authModels");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { ethers } = require("ethers");
+const crypto = require("../helpers/crypto");
 
 // Register handlers
 const signUpRequest = asyncHandler(async (req, res) => {
@@ -26,8 +27,8 @@ const signUpRequest = asyncHandler(async (req, res) => {
   console.log(hashedPassword);
 
   const wallet = ethers.Wallet.createRandom();
-  const publicAddress = wallet.address;
-  const privateAddress = wallet.privateKey;
+  const publicAddress = crypto.encrypt(wallet.address);
+  const privateAddress = crypto.encrypt(wallet.privateKey);
 
 console.log(`${publicAddress} ${privateAddress}`)
   const user = await authSchema.create({
