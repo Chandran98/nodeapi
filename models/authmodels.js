@@ -18,9 +18,15 @@ const authSchema = mongoose.Schema(
         privateAddress: { type: String },
       },
     ],
+    createdProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "products",
+      },
+    ],
     phone: {
       type: String,
-      
+
       required: [true, "Please add a phone"],
       default: "",
     },

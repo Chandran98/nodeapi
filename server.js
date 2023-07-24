@@ -1,6 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { ethers } = require("ethers");
+
+const path = require("path");
+const fs = require("fs");
 const cors = require("cors");
 const errorhandler = require("./middlewares/error");
 const connectDb = require("./config/db.config");
@@ -16,7 +19,8 @@ connectDb();
 const app = express();
 
 const port = process.env.PORT || 4000;
-// app.use(express.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
@@ -57,6 +61,8 @@ app.use("/api/crypto", require("./routes/cryptorouters"));
 
 app.all("*", (req, res) => {
   res.status(404);
+
+  res.sendFile("views/404.html", { root: __dirname });
   throw new Error("Route Not Found");
 });
 app.use(errorhandler);

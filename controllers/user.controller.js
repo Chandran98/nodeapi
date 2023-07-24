@@ -124,11 +124,28 @@ const unBlockUser = asyncHanlder(async (req, res) => {
     .json({ status: "success", message: `${unBUser.name} .is Un-blocked` });
 });
 
+const getUserById = asyncHanlder(async (req, res) => {
+  console.log(req.params.id);
+  const user = await userModel.findById(req.params.id);
+  console.log(user);
+  if (!user) {
+    res.status(404);
+    throw new Error("Not found ");
+  }
+  if (user.user_id !== req.user.id) {
+    res.status(403);
+    throw new Error("Not valid");
+  }
+  // await userModel.deleteOne({ _id: req.params.id });
+  res.status(200).json({ message: "delete by id" });
+});
+
 module.exports = {
   getuserdata,
   createuser,
   deleteuserById,
   updateuserById,
+  getUserById,
   getuserById,
   unBlockUser,
   blockUser,
