@@ -27,6 +27,6 @@ router
 router.route("/blockUser/:id").post(blockUser);
 router.route("/getUser/:id").post(getUserById);
 router.route("/unBlockUser/:id").post(unBlockUser);
-router.route("/upload").post(uploadImage);
+// router.route("/upload").post(uploadImage);
 
 module.exports = router;
