@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const { ethers } = require("ethers");
 const crypto = require("../helpers/crypto");
 const twilio = require("twilio");
+const { generateToken } = require("../helpers/validateId");
+const { validateToken } = require("../middlewares/tokenvalidation");
 require("dotenv").config();
 
 // Register handlers
@@ -59,6 +61,9 @@ const signUpRequest = asyncHandler(async (req, res) => {
 
 // Login handlers
 const signInRequest = asyncHandler(async (req, res) => {
+  console.log(req.headers);
+  console.log(req.header);
+
   const { email, password } = req.body;
   console.log(req.body);
   console.log(email, password);
@@ -78,18 +83,16 @@ const signInRequest = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid password");
   }
-
-  const accessToken = jwt.sign(
-    {
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-      },
+  console.log("approved");
+  const accessToken = generateToken({
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
     },
-    process.env.ACCESS_TOKEN,
-    { expiresIn: "1d" }
-  );
+  });
+
+  console.log("Dis-Approved");
   res.status(200).json({
     status: "success",
     token: accessToken,
@@ -100,16 +103,18 @@ const currentUser = asyncHandler(async (req, res) => {
   res.status(200).json(req.user);
 });
 
-const client = twilio(process.env.SID, process.env.TWILLO_SCERET_KEY);
+const client = twilio(process.env.SID, process.env.TWILIO_SCERET_KEY);
 
 const sendLoginOtp = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const mobile = req.body.mobile;
+  console.log(req.body);
   const otp = Math.floor(100000 + Math.random() * 900000);
-  
-  let otpEntry = await OtpModel.findOne({ mobile });
-  console.log(Date());
 
-  console.log(Date().setMinutes(expirationTime.getMinutes() + 5));
+  let otpEntry = await OtpModel.findOne({ mobile });
+  // console.log(Date());
+
+  // console.log(Date().setMinutes(expirationTime.getMinutes() + 5));
 
   otpEntry
     ? ((otpEntry.otp = otp), otpEntry.save())
@@ -130,7 +135,7 @@ const sendLoginOtp = asyncHandler(async (req, res) => {
       if (message) {
         res
           .status(200)
-          .json({ message: `OTP sent successfully${message.date_updated}` });
+          .json({ message: `OTP sent successfully${message.accountSid}` });
       }
     }
   );
@@ -150,10 +155,22 @@ const verifyOtp = asyncHandler(async (req, res) => {
   }
 });
 
+const getPhoto = asyncHandler(async (req, res) => {
+  console.log(req.file.originalname);
+  console.log(req.file);
+
+  try {
+    res.json({ status: "success", message: "uploaded" });
+  } catch (e) {
+    res.json({ error: e });
+  }
+});
+
 module.exports = {
   currentUser,
   signUpRequest,
   signInRequest,
   sendLoginOtp,
   verifyOtp,
+  getPhoto,
 };
