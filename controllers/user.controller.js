@@ -1,5 +1,5 @@
 const asyncHanlder = require("express-async-handler");
-const userModel = require("../models/authModels");
+const userModel = require("../models/authmodels");
 const { validateMongoDbId } = require("../helpers/validateId");
 const { cloudStorage } = require("../config/cloudinaryConfig");
 
@@ -143,22 +143,22 @@ const getUserById = asyncHanlder(async (req, res) => {
   res.status(200).json({ message: "delete by id" });
 });
 
+const getUserPhoto = asyncHanlder(async (req, res) => {
+  console.log("sdfafds");
+  // console.log(req.file);
 
-// const getUserPhoto = asyncHanlder(async (req, res) => {
-//   console.log("sdfafds");
-//   console.log(req.file);
-
-//   try {
-//     res.json({ status: "success", message: "uploaded" });
-//   } catch (e) {
-//     res.json({ error: e });
-//   }
-// });
+  try {
+    res.json({ status: "success", message: "uploaded" });
+  } catch (e) {
+    res.json({ error: e });
+  }
+});
 
 module.exports = {
   getuserdata,
   createuser,
   deleteuserById,
+  getUserPhoto,
   updateuserById,
   getUserById,
   getuserById,

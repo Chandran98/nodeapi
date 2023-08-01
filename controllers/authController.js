@@ -1,13 +1,16 @@
 const asyncHandler = require("express-async-handler");
-const authSchema = require("../models/authModels");
+// const authSchema = require("../models/authModels");
+
+const User = require("../models/authmodels");
 const OtpModel = require("../models/otpmodel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { ethers } = require("ethers");
+const { ethers, makeError } = require("ethers");
 const crypto = require("../helpers/crypto");
 const twilio = require("twilio");
 const { generateToken } = require("../helpers/validateId");
 const { validateToken } = require("../middlewares/tokenvalidation");
+const authmodels = require("../models/authmodels");
 require("dotenv").config();
 
 // Register handlers
@@ -156,8 +159,30 @@ const verifyOtp = asyncHandler(async (req, res) => {
 });
 
 const getPhoto = asyncHandler(async (req, res) => {
-  console.log(req.file.originalname);
-  console.log(req.file);
+  // console.log(req.file.originalname);
+  console.log(req.user._id);
+
+  const mainUser = await User.findById(req.user._id);
+  const viewedUser = await User.findById(req.body.id);
+
+  if (!mainUser || !viewedUser) {
+    res.status(201).json({ status: "false", message: "User not found" });
+  }
+
+  if (mainUser && viewedUser) {
+    const alreadyViewer = mainUser.viewers.find(
+      (viewer) => viewer.toString() === viewedUser._id.toString()
+    );
+    if (alreadyViewer) {
+      res.status(200).json({ status: "true", message: "Already viewed" });
+    }
+  } else {
+    mainUser.viewers.push(viewedUser._id);
+    await mainUser.save();
+    res.status(200).json({ status: "true", message: "viewed successfully" });
+  }
+
+  // console.log(`Viewers ${isUser.viewers}`);
 
   try {
     res.json({ status: "success", message: "uploaded" });

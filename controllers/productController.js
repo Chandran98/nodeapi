@@ -2,7 +2,8 @@ const asyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 // const userModel = require("../models/authmodels");
 
-const userModel = require("../models/authModels");
+// const authSchema = require("../models/authmodels");
+const userModel = require("../models/authmodels");
 const proudctmodel = require("..//models/productmodel");
 
 const getProducts = asyncHandler((req, res) => {

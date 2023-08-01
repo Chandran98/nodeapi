@@ -11,9 +11,8 @@ const authSchema = mongoose.Schema(
       required: [true, "Please add an email"],
       unique: [true, "Please add a valid email"],
     },
-    profilePhoto:{
-      type:String,
-
+    profilePhoto: {
+      type: String,
     },
     wallet: [
       {

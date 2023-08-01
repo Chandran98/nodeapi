@@ -10,7 +10,7 @@ const {
   getUserById,
   blockUser,
   unBlockUser,
-  // getUserPhoto,
+  getUserPhoto,
 } = require("../controllers/user.controller");
 const { validateToken } = require("../middlewares/tokenvalidation");
 const { mailController } = require("../helpers/mailer");
@@ -32,7 +32,7 @@ router.route("/blockUser/:id").post(blockUser);
 router.route("/getUser/:id").post(getUserById);
 router.route("/unBlockUser/:id").post(unBlockUser);
 
-// router.route("/upload").post( getUserPhoto);
+router.route("/upload").post( getUserPhoto);
 // const upload = multer({ cloudStorage });
 // router.route("/upload").post(upload.single("profile"), getUserPhoto);
 
