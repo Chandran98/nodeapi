@@ -19,7 +19,7 @@ const validateToken = expressAsyncHandler(async (req, res, next) => {
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, decode) => {
       if (err) {
         res.status(401);
-        throw new Error("Token is not verified");
+        throw new Error("Invalid or Expired Token ");
       }
       req.user = decode.user;
       next();

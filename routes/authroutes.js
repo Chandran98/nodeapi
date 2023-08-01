@@ -4,16 +4,25 @@ const {
   signUpRequest,
   signInRequest,
   currentUser,
+  sendLoginOtp,
+  verifyOtp,
+  getPhoto,
 } = require("../controllers/authController");
+const multer = require("multer");
+const { cloudStorage } = require("../config/cloudinaryConfig");
 
 const router = express.Router();
 
-// router.route("/register").post(registerUser);
-// router.post("/register", registerUser);
-// router.post("/login", loginUser);
+const upload = multer({ cloudStorage });
+router.route("/upload").post(upload.single("profile"),validateToken, getPhoto);
 
-router.post("/signUp", signUpRequest);
-router.post("/signIn", signInRequest);
+router.route("/signUp").post(signUpRequest);
+router.route("/signIn").post(signInRequest);
+router.route("/sendOtp").post(validateToken, sendLoginOtp);
+router.route("/verifyOtp").post(verifyOtp);
 
-router.get("/current", validateToken, currentUser);
+// router.route("/uploadPic").post(verifyOtp);
+
+router.route("/current").get(validateToken, currentUser);
+
 module.exports = router;

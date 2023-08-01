@@ -3,11 +3,11 @@ const mongoose = require ("mongoose");
 
 const productModel =mongoose.Schema(
     {
-        // produId:{
-        //     type :mongoose.Schema.Types.ObjectId,
-        //     required:true,
-        //     ref:"Product"
-        // },
+        creatorId:{
+            type :mongoose.Schema.Types.ObjectId,
+            
+            ref:"Users"
+        },
         
         name:{
             type :String,

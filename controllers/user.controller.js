@@ -1,6 +1,9 @@
 const asyncHanlder = require("express-async-handler");
-const userModel = require("../models/authModels");
+const userModel = require("../models/authmodels");
 const { validateMongoDbId } = require("../helpers/validateId");
+const { cloudStorage } = require("../config/cloudinaryConfig");
+
+const multer = require("multer");
 
 const getuserdata = asyncHanlder(async (req, res) => {
   // const user = await userModel.find({ user_id: req.user.id });
@@ -124,11 +127,40 @@ const unBlockUser = asyncHanlder(async (req, res) => {
     .json({ status: "success", message: `${unBUser.name} .is Un-blocked` });
 });
 
+const getUserById = asyncHanlder(async (req, res) => {
+  console.log(req.params.id);
+  const user = await userModel.findById(req.params.id);
+  console.log(user);
+  if (!user) {
+    res.status(404);
+    throw new Error("Not found ");
+  }
+  if (user.user_id !== req.user.id) {
+    res.status(403);
+    throw new Error("Not valid");
+  }
+  // await userModel.deleteOne({ _id: req.params.id });
+  res.status(200).json({ message: "delete by id" });
+});
+
+const getUserPhoto = asyncHanlder(async (req, res) => {
+  console.log("sdfafds");
+  // console.log(req.file);
+
+  try {
+    res.json({ status: "success", message: "uploaded" });
+  } catch (e) {
+    res.json({ error: e });
+  }
+});
+
 module.exports = {
   getuserdata,
   createuser,
   deleteuserById,
+  getUserPhoto,
   updateuserById,
+  getUserById,
   getuserById,
   unBlockUser,
   blockUser,
