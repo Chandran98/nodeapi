@@ -14,6 +14,9 @@ const authSchema = mongoose.Schema(
     profilePhoto: {
       type: String,
     },
+    lastLogin: {
+      type: Date,
+    },
     wallet: [
       {
         publicAddress: { type: String },
@@ -58,13 +61,29 @@ const authSchema = mongoose.Schema(
         ref: "Users",
       },
     ],
+    blockList: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Users",
+      },
+    ],
     active: {
       type: Boolean,
       default: true,
     },
-    plan: [{ type: String, enum: ["Noob", "Pro", "XPro"], default: "Noob" }],
+    plan:[ {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Pro"],
+      default: "Beginner",
+    }],
   },
-  { timestamp: true }
+  { timestamp: true, toJSON: { virtuals: true } }
 );
+// authSchema.virtual("blockedUsers").get(function () {
+//   return this.blockList.length;
+// });
 
 module.exports = mongoose.model("Users", authSchema);
+// "lastLogin": "2023-08-03T11:27:06.383Z",
+// "lastLogin": "2023-08-03T11:28:23.590Z",
+
