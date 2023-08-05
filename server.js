@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { ethers } = require("ethers");
+const http = require("http");
+const server = require("socket.io");
 
 const path = require("path");
 const fs = require("fs");
@@ -17,6 +19,9 @@ const morgan = require("morgan");
 
 connectDb();
 const app = express();
+
+const serverApp = http.createServer(app);
+const io =  server(serverApp);
 
 const port = process.env.PORT || 4000;
 app.use(express.json());
@@ -37,7 +42,7 @@ const privateKey = keypair.secretKey.toString();
 // console.log(`Key's ${publicKey}`);
 // console.log(`Key's ${privateKey}`);
 
-// const text_to_encrypt = "texta";
+// const text_to_encrypt = "text";
 // const result = crypto.aesEncrypt(text_to_encrypt);
 // console.log("“encrypted result", result);
 
@@ -50,20 +55,29 @@ const decryptedText2 = crypto._decrypt(
 console.log("‘decrypted text", decryptedText2);
 
 app.use("/api/users", require("./routes/usersroute"));
-
-app.use("/api/aws", (req, res) => {
-  res.status(200).json({ message: "Busted" });
-});
-
 app.use("/api/auth", require("./routes/authroutes"));
 app.use("/api/products", require("./routes/productroutes"));
 app.use("/api/crypto", require("./routes/cryptorouters"));
 
+app.use("/api/aws", (req, res) => {
+  res.status(200).json({ message: "Busted" });
+});
+app.use("/api/index", (req, res) => {
+  res.sendFile(__dirname + "/views/index.html");
+});
+
+io.on("connection",(socket)=>{
+console.log("a user connected");
+
+})
+
+
+
 app.all("*", (req, res) => {
   res.status(404);
 
-  res.sendFile("views/404.html", { root: __dirname });
-  throw new Error("Route Not Found");
+  res.sendFile(__dirname + "views/404.html");
+  // throw new Error("Route Not Found");
 });
 app.use(errorhandler);
 

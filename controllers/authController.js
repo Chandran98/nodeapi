@@ -201,14 +201,10 @@ const getPhoto = asyncHandler(async (req, res) => {
 
   const mainUser = await User.findById(req.user._id);
   const viewedUser = await User.findById(req.body.id);
-  console.log("sdafdsfd");
   if (!mainUser || !viewedUser) {
-    console.log("sdafdsfd1");
     res.status(201).json({ status: "false", message: "User not found" });
   }
-  console.log("sdafdsfd2");
   if (mainUser && viewedUser) {
-    console.log("sdafdsfd3");
     console.log(mainUser.viewers);
     const alreadyViewer = mainUser.viewers.find(
       (viewer) => viewer.toString() === viewedUser._id.toString()
@@ -288,6 +284,7 @@ const unBlockUser = asyncHandler(async (req, res) => {
     res.status(200).json({ status: "true", message: "UnBlocked successfully" });
   }
 });
+
 module.exports = {
   currentUser,
   deleteUser,
