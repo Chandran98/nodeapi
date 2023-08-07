@@ -1,11 +1,15 @@
 const asyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 // const userModel = require("../models/authmodels");
-
+// const asyncHandler = require("express-async-handler");
 // const authSchema = require("../models/authmodels");
 const userModel = require("../models/authmodels");
 const proudctmodel = require("..//models/productmodel");
-
+const Razorpay = require('razorpay');
+const razorpay = new Razorpay({
+  key_id: 'rzp_test_HjGAinZNMpVBaE',
+  key_secret: 'nAffDZ365JRyOoI9yR0OOd2t',
+});
 const getProducts = asyncHandler((req, res) => {
   res.status(200).json({ message: "new products" });
 });
@@ -75,8 +79,27 @@ const getMyProductsById = asyncHandler(async (req, res) => {
   res.status(200).json({ message: `product id ${req.params.id}` });
 });
 
+const payOnline = asyncHandler(async (req, res) => {
+  const amountInr = req.body.amount;
+  const id = req.user._id;
+  console.log(`Amount${amountInr},id${id}`);
+
+  const options = {
+    amount: amountInr * 100, // Amount in paise (Indian currency)
+    currency: 'INR',
+    receipt: 'order_receipt23', // Replace with your custom receipt ID
+  };
+
+  await razorpay.orders.create(options, (err, result) => {
+    if (err) res.status(201).json({ status: false, message: err });
+
+    if (result) res.status(200).json({ status: true, message: result });
+  })
+
+});
+
 module.exports = {
-  getProducts,
+  getProducts, payOnline,
   createProductsById,
   getMyProductsById,
   createProduct,

@@ -1,6 +1,6 @@
 const express = require("express");
 const { getCrypto } = require("../controllers/cryptocontrollers");
-const { placeOrder, accountInfo ,bidPrice,depth,priceInfo} = require("../controllers/tradeController");
+const { placeOrder, accountInfo, bidPrice, depth, priceInfo } = require("../controllers/tradeController");
 const { validateToken } = require("../middlewares/tokenvalidation");
 
 const router = express.Router();

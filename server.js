@@ -16,12 +16,28 @@ const { Connection, clusterApiUrl } = require("@solana/web3.js");
 const crypto = require("./helpers/crypto");
 const { route } = require("./routes/usersroute");
 const morgan = require("morgan");
+const formatter = require("./public/utils/utils");
 
 connectDb();
 const app = express();
 
 const serverApp = http.createServer(app);
-const io =  server(serverApp);
+
+const io = server(serverApp);
+const botName = "Estio";
+io.on("connection", (socket) => {
+  socket.emit("message", formatter(botName, "Welcome node app"));
+
+  socket.broadcast.emit("message", formatter(botName, "A user has joined"));
+
+  socket.on("disconnect", () => {
+    io.emit("message", formatter(botName, "A user has left the chat"));
+  });
+
+  socket.on("chatMessage", (msg) => {
+    io.emit("message",formatter(botName, msg) );
+  });
+});
 
 const port = process.env.PORT || 4000;
 app.use(express.json());
@@ -38,6 +54,8 @@ const keypair = Keypair.generate();
 
 const publicKey = keypair.publicKey.toString();
 const privateKey = keypair.secretKey.toString();
+
+app.use(express.static(path.join(__dirname, "public")));
 
 // console.log(`Key's ${publicKey}`);
 // console.log(`Key's ${privateKey}`);
@@ -66,13 +84,6 @@ app.use("/api/index", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
-io.on("connection",(socket)=>{
-console.log("a user connected");
-
-})
-
-
-
 app.all("*", (req, res) => {
   res.status(404);
 
@@ -81,7 +92,7 @@ app.all("*", (req, res) => {
 });
 app.use(errorhandler);
 
-app.listen(port, () => {
+serverApp.listen(port, () => {
   console.log(`Server running on ${port}`);
 });
 
